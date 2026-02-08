@@ -1,9 +1,9 @@
 ---
-name: design-replicator
+name: design-replicator-v2
 description: "Pixel-perfect 1:1 replication of document designs, website layouts, flyers, brochures, and presentations from images or screenshots. Converts source designs into editable HTML/CSS, PDF, or PowerPoint (.pptx) with exact text placement, font matching, image positioning, colors, and layout structure. Use when the user provides an image/screenshot/PDF of a design and wants an identical editable reproduction. Triggers on: 'replicate this design', 'copy this layout', 'recreate this document', 'convert to editable', 'match this exactly', screenshot-to-code, design-to-document, or any request to reproduce a visual design faithfully."
 ---
 
-# Design Replicator
+# Design Replicator v2.0 (Latest — February 2026)
 
 Pixel-perfect 1:1 replication of any visual design into editable formats.
 

@@ -1,4 +1,4 @@
-# Design Replicator Skill (Standalone)
+# Design Replicator Skill v2.0 (Standalone — February 2026)
 
 Upload this file to Claude Code or Claude.ai as a custom skill for pixel-perfect 1:1 document/design replication.
 

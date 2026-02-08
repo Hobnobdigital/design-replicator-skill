@@ -1,157 +1,169 @@
-# 🎨 Design Replicator Skill for Claude
+# 🎨 Design Replicator Skill
 
-A Claude Skill that replicates website, document, or report designs **exactly** from screenshots, PDFs, images, or mockups. Creates pixel-perfect code that matches the input design 1:1.
+**Pixel-perfect 1:1 design replication for Claude Code & Claude.ai**
 
-## 📦 Installation
-
-### Option 1: Claude Code CLI
-```bash
-# Install directly from GitHub
-/plugin add https://github.com/Hobnobdigital/design-replicator-skill
-
-# Or install to specific agent
-npx skills add Hobnobdigital/design-replicator-skill -a claude-code
-```
-
-### Option 2: Manual Installation
-1. Download this repository
-2. Copy the `design-replicator-skill` folder to your Claude Code skills directory:
-   ```
-   ~/.claude-code/skills/  (macOS/Linux)
-   %APPDATA%\Claude\skills\  (Windows)
-   ```
-3. Restart Claude Code
-
-### Option 3: Claude.ai Web Interface
-1. Go to Settings > Capabilities
-2. Enable Skills toggle
-3. Click "Upload Skill"
-4. Select the `design-replicator-skill` folder
-
-## 🎯 What This Skill Does
-
-This skill teaches Claude to:
-- ✅ Analyze screenshots, PDFs, images, and mockups
-- ✅ Extract exact design specifications (colors, fonts, spacing, layout)
-- ✅ Generate pixel-perfect HTML/CSS/React code
-- ✅ Match designs 1:1 without generic "AI slop"
-- ✅ Handle responsive designs correctly
-- ✅ Replicate any website, document, or report layout
-
-## 🚀 Usage
-
-Once installed, Claude will automatically use this skill when you:
-- Upload a screenshot or image of a design
-- Say "replicate this design"
-- Say "clone this website"
-- Say "exact replica of this layout"
-- Provide a PDF to recreate
-
-### Example Prompts:
-```
-"Replicate this website design exactly from the screenshot"
-"Clone this landing page I uploaded"
-"Match this PDF report layout perfectly"
-"Recreate this dashboard design 1:1"
-"Convert this Figma mockup to React code"
-```
-
-## 📋 How It Works
-
-### Step 1: Analysis
-Claude examines your input and extracts:
-- Typography (fonts, sizes, weights)
-- Colors (exact hex codes)
-- Spacing (margins, padding, gaps)
-- Layout (grid structure, alignment)
-- Visual elements (buttons, cards, images)
-
-### Step 2: Specification
-Claude documents precise measurements:
-```
-- Primary Color: #3B82F6
-- Heading Font: Georgia, 48px, bold
-- Container: max-width 1200px, centered
-- Section Padding: 80px vertical
-```
-
-### Step 3: Code Generation
-Claude generates production-ready code:
-- HTML + Tailwind CSS (recommended)
-- React + Tailwind CSS (for interactive sites)
-- HTML + CSS (for maximum control)
-
-### Step 4: Verification
-Claude verifies pixel-perfect matching:
-- Colors match exactly
-- Fonts are correct
-- Spacing is identical
-- Layout structure matches
-
-## 🛠️ Supported Output Formats
-
-- **HTML + Tailwind CSS** - Fast, utility-first styling
-- **React + Tailwind CSS** - Component-based, interactive
-- **Vue + Tailwind CSS** - Progressive framework
-- **HTML + CSS** - Traditional, maximum control
-- **Bootstrap** - Classic framework
-- **Ionic + Tailwind** - Mobile-first
-- **SVG** - For graphics and illustrations
-
-## 🎨 Quality Standards
-
-The replicated design will be:
-- ✅ Visually indistinguishable from original
-- ✅ Pixel-perfect measurements
-- ✅ Exact color matches
-- ✅ Proper responsive behavior
-- ✅ Clean, production-ready code
-- ✅ Fully commented with specs
-
-## 📁 Skill Structure
-
-```
-design-replicator-skill/
-├── SKILL.md          # Main skill instructions
-├── README.md         # This file
-└── examples/         # Example replications (optional)
-```
-
-## 🔄 Comparison with Other Tools
-
-| Tool | Best For | Claude Skill Advantage |
-|------|----------|------------------------|
-| screenshot-to-code | Quick conversions | Better analysis, exact specs |
-| Figma Dev Mode | Figma files | Works with any image/PDF |
-| Manual coding | Full control | Automated + precise |
-| **This Skill** | **Exact 1:1 replication** | **Pixel-perfect + documented** |
-
-## 📝 Notes
-
-- **Input Quality**: Better input images = better results
-- **Complexity**: Simple designs replicate more accurately
-- **Assets**: Provide fonts/images when possible for exact matches
-- **Responsive**: Skill handles responsive breakpoints automatically
-
-## 🤝 Contributing
-
-Feel free to submit improvements:
-- Better analysis techniques
-- Additional output formats
-- More example prompts
-- Enhanced verification methods
-
-## 📄 License
-
-MIT License - Free to use, modify, and distribute
-
-## 🆘 Support
-
-For issues or questions:
-1. Check the skill documentation in SKILL.md
-2. Create an issue in this repository
-3. Refer to Claude's skill documentation
+Converts any document design, website layout, flyer, brochure, or presentation from an image/screenshot into an editable format with exact text placement, font matching, image positioning, and layout structure.
 
 ---
 
-**Ready to replicate designs exactly? Install this skill and start cloning!** 🎨
+## ✨ What It Does
+
+| Input | Output | Method |
+|-------|--------|--------|
+| Screenshot/image of any design | **HTML/CSS** | Absolute positioning, exact coordinates |
+| Screenshot/image of any design | **PDF** | HTML → Puppeteer → pixel-perfect PDF |
+| Screenshot/image of any design | **Editable PowerPoint (.pptx)** | PptxGenJS with exact placement |
+
+### Key Features
+
+- ✅ **Exact text placement** — position, size, weight, color, alignment
+- ✅ **Font matching** — identifies and maps to closest Google Font or system font
+- ✅ **Image positioning** — exact coordinates and dimensions preserved
+- ✅ **Color matching** — hex values sampled from source design
+- ✅ **Layout structure** — grids, columns, spacing replicated exactly
+- ✅ **Decorative elements** — borders, shadows, gradients, icons, rounded corners
+- ✅ **Editable output** — text boxes in PPTX, HTML elements in web, form fields in PDF
+- ✅ **Visual QA loop** — automated comparison with source to ensure ≥95% match
+
+---
+
+## 📁 Repository Structure
+
+```
+design-replicator-skill/
+├── SKILL.md                          ← Main skill file (for Claude Code)
+├── DESIGN-REPLICATOR-STANDALONE.md   ← Standalone version (upload to Claude.ai)
+├── README.md                         ← This file
+└── references/
+    ├── font-matching.md              ← Font identification & Google Fonts mapping
+    └── pptx-coordinates.md           ← PowerPoint coordinate system reference
+```
+
+---
+
+## 🚀 Installation
+
+### For Claude Code CLI
+
+```bash
+# Clone this repo into your Claude Code skills directory
+git clone https://github.com/Hobnobdigital/design-replicator-skill.git ~/.claude/skills/design-replicator
+```
+
+Then just ask Claude Code:
+> *"Replicate this design as an editable PowerPoint"*
+
+Claude Code will automatically detect and use the skill.
+
+### For Claude.ai (Web)
+
+1. Go to [claude.ai](https://claude.ai)
+2. Start a new chat
+3. Click **Add content** (paperclip icon)
+4. Upload `DESIGN-REPLICATOR-STANDALONE.md`
+5. Upload your source design image
+6. Ask: *"Replicate this design exactly as [HTML/PDF/PPTX]"*
+
+### For Claude Code Plugins
+
+```
+/plugin install design-replicator
+```
+
+---
+
+## 🔄 How It Works
+
+```
+1. You provide → Image/screenshot/PDF of a design
+2. Claude analyzes → Layout, fonts, colors, positions, spacing
+3. Claude generates → HTML/CSS or PPTX with exact coordinates
+4. Visual QA → Screenshots output, compares with source
+5. Iterate → Fixes differences until ≥95% visual match
+```
+
+### The Replication Pipeline
+
+| Step | What Happens | Tools Used |
+|------|-------------|------------|
+| **1. Analyze** | Vision extracts layout, fonts, colors, positions | Claude Vision |
+| **2. Extract** | OCR gets precise text bounding boxes | Tesseract OCR |
+| **3. Match Fonts** | Identifies closest Google Font or system font | Font reference DB |
+| **4. Generate** | Creates output with exact coordinates | PptxGenJS, Puppeteer, ReportLab |
+| **5. QA** | Screenshots output, compares side-by-side | Puppeteer, LibreOffice |
+| **6. Iterate** | Fixes position/size/color differences | 3-5 rounds typical |
+
+---
+
+## 📋 Supported Document Types
+
+| Document Type | Best Output | Notes |
+|--------------|-------------|-------|
+| Flyer / Poster | HTML → PDF | Single page, absolute positioning |
+| Brochure | HTML → PDF | Multi-page with @page rules |
+| Presentation | PPTX | Fully editable slide deck |
+| Website / Landing Page | HTML/CSS | Responsive with Grid/Flexbox |
+| Business Card | HTML → PDF | High-DPI (3x scale) |
+| Social Media Post | HTML → PNG | Puppeteer screenshot |
+| Resume / CV | HTML → PDF | Clean typography focus |
+| Menu / Price List | HTML → PDF | Table/grid structure |
+| Certificate / Award | HTML → PDF | Decorative elements |
+
+---
+
+## 🔧 Dependencies
+
+### Node.js
+```bash
+npm install puppeteer pptxgenjs
+```
+
+### Python
+```bash
+pip install pytesseract opencv-python reportlab Pillow pdfplumber
+```
+
+### System
+```bash
+# Tesseract OCR
+sudo apt install tesseract-ocr        # Ubuntu/Debian
+brew install tesseract                  # macOS
+
+# LibreOffice (for PPTX → PDF conversion)
+sudo apt install libreoffice-impress   # Ubuntu/Debian
+
+# Poppler (for PDF → images)
+sudo apt install poppler-utils         # Ubuntu/Debian
+brew install poppler                    # macOS
+```
+
+---
+
+## 💡 Tips for Best Results
+
+1. **Provide high-resolution source images** — higher res = better analysis
+2. **Specify the output format** — "as editable PPTX" or "as HTML/CSS"
+3. **Mention specific requirements** — "all text must be editable" or "match fonts exactly"
+4. **Include multiple views** if the design has multiple pages/slides
+5. **Font matching is 80% of the battle** — nail the font and everything looks closer
+
+---
+
+## 📄 License
+
+MIT License — free for personal and commercial use.
+
+---
+
+## 🤝 Contributing
+
+1. Fork this repository
+2. Create a feature branch
+3. Add improvements to SKILL.md or references
+4. Submit a pull request
+
+---
+
+**Built for designers, marketers, and anyone who needs pixel-perfect document replication.**
+
+Created by **Kwame Sarkodee-Adoo** | [Hobnob Digital](https://github.com/Hobnobdigital)

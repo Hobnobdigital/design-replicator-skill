@@ -1,269 +1,418 @@
 ---
 name: design-replicator
-description: Replicate website, document, or report designs exactly from screenshots, PDFs, images, or mockups. Creates pixel-perfect HTML/CSS/React code that matches the input design 1:1. Use when user says "replicate this design", "clone this website", "exact replica", "match this design", or provides an image/PDF of a design to recreate.
-license: MIT
+description: "Pixel-perfect 1:1 replication of document designs, website layouts, flyers, brochures, and presentations from images or screenshots. Converts source designs into editable HTML/CSS, PDF, or PowerPoint (.pptx) with exact text placement, font matching, image positioning, colors, and layout structure. Use when the user provides an image/screenshot/PDF of a design and wants an identical editable reproduction. Triggers on: 'replicate this design', 'copy this layout', 'recreate this document', 'convert to editable', 'match this exactly', screenshot-to-code, design-to-document, or any request to reproduce a visual design faithfully."
 ---
 
-# Design Replicator Skill
+# Design Replicator
 
-This skill replicates website, document, or report designs exactly from visual inputs (screenshots, PDFs, images, mockups). It creates pixel-perfect code that matches the input design 1:1.
+Pixel-perfect 1:1 replication of any visual design into editable formats.
 
-## When to Use This Skill
+## Workflow Overview
 
-Use this skill when the user:
-- Says "replicate this design", "clone this website", "exact replica"
-- Says "match this design", "recreate this layout"
-- Provides a screenshot, PDF, or image of a design
-- Wants to recreate an existing website or document
-- Needs to convert a Figma design or mockup to code
-
-## Core Workflow
-
-### Step 1: Analyze the Input Design
-
-When the user provides an image, PDF, or screenshot:
-
-1. **Examine the overall layout**
-   - Grid structure (1-column, 2-column, sidebar layout, etc.)
-   - Header, body, footer structure
-   - Navigation placement
-   - Content hierarchy
-
-2. **Identify visual elements**
-   - Typography (fonts, sizes, weights, line heights)
-   - Color palette (backgrounds, text, accents, borders)
-   - Spacing (margins, padding, gaps)
-   - Images and graphics
-   - Icons and decorative elements
-
-3. **Note interactive elements**
-   - Buttons (styles, hover states)
-   - Forms and inputs
-   - Links and navigation
-   - Cards and containers
-
-### Step 2: Extract Design Specifications
-
-Document these specifications precisely:
-
-**Typography:**
 ```
-- Font families used
-- Heading sizes (H1, H2, H3, etc.)
-- Body text size and line height
-- Special text treatments (bold, italic, uppercase)
+Source Image/PDF → Vision Analysis → Layout Extraction → Output Generation → Visual QA → Iterate
 ```
 
-**Colors:**
-```
-- Primary background color
-- Secondary/accent colors
-- Text colors
-- Border colors
-- Shadow colors
-```
+**Supported outputs:** HTML/CSS, PDF (via HTML→PDF), editable PowerPoint (.pptx)
 
-**Layout:**
-```
-- Container max-width
-- Grid structure
-- Column widths
-- Gap sizes
-- Responsive breakpoints
-```
+---
 
-**Spacing:**
+## Step 1: Analyze the Source
+
+### Vision Analysis (Claude's Eyes)
+
+When given a source image, extract ALL of the following:
+
 ```
-- Section padding
-- Element margins
-- Grid gaps
-- Container padding
+LAYOUT ANALYSIS CHECKLIST:
+□ Overall dimensions and aspect ratio
+□ Background color(s) / gradients / images
+□ Grid structure (columns, rows, sections)
+□ Every text element: content, approximate position, size, weight, color, alignment
+□ Every image: position, dimensions, aspect ratio, description
+□ Spacing: margins, padding, gaps between elements
+□ Typography: font family identification, sizes, weights, line heights
+□ Colors: exact hex values (sample from the image)
+□ Decorative elements: borders, lines, shapes, icons, shadows
+□ Z-index/layering: what overlaps what
 ```
 
-### Step 3: Generate Pixel-Perfect Code
+### Font Identification
 
-Based on the analysis, generate code using ONE of these stacks:
+Identify fonts by visual characteristics:
 
-**Option A: HTML + Tailwind CSS** (Recommended for simple sites)
-- Use Tailwind utility classes for exact styling
-- Match colors using arbitrary values (e.g., `bg-[#FF5733]`)
-- Use exact pixel values (e.g., `w-[300px]`, `h-[200px]`)
-- Include responsive variants
+| Characteristic | Common Matches |
+|---------------|---------------|
+| Geometric sans-serif | Montserrat, Poppins, Raleway, Futura |
+| Humanist sans-serif | Open Sans, Lato, Source Sans Pro, Nunito |
+| Neo-grotesque | Inter, Roboto, Helvetica Neue, Arial |
+| Modern serif | Playfair Display, Merriweather, Lora |
+| Slab serif | Roboto Slab, Bitter, Arvo |
+| Monospace | JetBrains Mono, Fira Code, Source Code Pro |
+| Script/handwritten | Dancing Script, Pacifico, Caveat |
+| Condensed | Oswald, Barlow Condensed, Roboto Condensed |
+| Display/bold | Anton, Bebas Neue, Impact |
 
-**Option B: React + Tailwind CSS** (For interactive sites)
-- Create React components for reusable elements
-- Use Tailwind for styling
-- Add state management if needed
-- Include hover/focus states
+**Process:**
+1. Describe font characteristics (serif vs sans, weight, width, x-height)
+2. Match to closest Google Font or system font
+3. If uncertain, provide 2-3 candidates and note which is primary choice
+4. Use Google Fonts CDN: `https://fonts.googleapis.com/css2?family=Font+Name:wght@300;400;600;700`
 
-**Option C: HTML + CSS** (For maximum control)
-- Use inline styles for pixel-perfect values
-- Or create a dedicated CSS file
-- Use CSS variables for repeated values
+### Color Extraction
 
-### Step 4: Verification Checklist
+Describe colors precisely. When analyzing an image:
+- Use CSS color values: `#hex`, `rgb()`, `hsl()`
+- Note opacity/transparency
+- Identify primary, secondary, accent, and background colors
+- Check text colors against backgrounds for contrast
 
-Before presenting the code, verify:
+---
 
-- [ ] Colors match exactly (use color picker values)
-- [ ] Fonts match the original
-- [ ] Spacing is identical (margins, padding, gaps)
-- [ ] Layout structure matches
-- [ ] Images are properly sized and positioned
-- [ ] Typography matches (size, weight, line height)
-- [ ] Responsive behavior works
-- [ ] No placeholder content - everything is filled
+## Step 2: Generate Output
 
-## Critical Rules for Exact Replication
+### Output A: HTML/CSS (Recommended for Most Cases)
 
-### 1. NO "AI Slop"
-- Do NOT use generic purple gradients
-- Do NOT use default rounded corners everywhere
-- Do NOT use default fonts (Inter, Roboto, Arial)
-- Do NOT center everything by default
-- Match the EXACT design choices in the reference
+**This is the highest-fidelity output.** Use absolute or CSS Grid positioning for pixel-perfect placement.
 
-### 2. Exact Measurements
-- Use pixel-perfect values from the reference
-- Do not approximate - measure precisely
-- Use browser dev tools or image editor to get exact values
-- Document the measurements in comments
-
-### 3. Match Typography EXACTLY
-- Identify the exact font family
-- Match font sizes precisely
-- Match font weights (400, 600, 700, etc.)
-- Match letter-spacing and line-height
-- Match text transformations (uppercase, capitalize)
-
-### 4. Match Colors EXACTLY
-- Extract hex codes using color picker
-- Note opacity values
-- Match gradient stops precisely
-- Document all colors used
-
-### 5. Match Layout EXACTLY
-- Same grid structure
-- Same column widths
-- Same responsive breakpoints
-- Same alignment (left, right, center, justify)
-
-## Output Format
-
-### For HTML/Tailwind:
 ```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Replicated Design</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Custom config for exact colors/fonts -->
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'brand-primary': '#EXACT_COLOR',
-                        'brand-secondary': '#EXACT_COLOR',
-                    },
-                    fontFamily: {
-                        'custom': ['Exact Font', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[Document Title]</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=[Font]&display=swap" rel="stylesheet">
+  <style>
+    /* Reset */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* Page container - match source dimensions exactly */
+    .page {
+      width: [exact_width]px;
+      height: [exact_height]px;
+      position: relative;
+      overflow: hidden;
+      background: [background];
+      font-family: '[Font]', sans-serif;
+    }
+
+    /* Position every element absolutely for pixel-perfect placement */
+    .element {
+      position: absolute;
+      left: [x]px;
+      top: [y]px;
+      width: [w]px;
+      height: [h]px;
+    }
+  </style>
 </head>
 <body>
-    <!-- Exact replica of the design -->
+  <div class="page">
+    <!-- Each element positioned exactly -->
+  </div>
 </body>
 </html>
 ```
 
-### For React:
-```jsx
-// Component structure matching the design exactly
-// Use exact values from analysis
+**Key rules for HTML output:**
+- Use `position: absolute` for exact placement when layout is fixed
+- Use CSS Grid/Flexbox when layout has clear grid structure
+- Include ALL spacing as explicit values (no `auto`)
+- Match font-size in `px` (not em/rem) for exact reproduction
+- Use `line-height` in px for exact text spacing
+- Include `letter-spacing` if text appears tracked
+- Set exact `width` on text containers to match line breaks
+- Use `background-size: cover` or exact dimensions for images
+
+### Output B: PDF (via HTML)
+
+Generate HTML first (as above), then convert:
+
+```javascript
+// Using Puppeteer (Node.js)
+const puppeteer = require('puppeteer');
+
+(async () => {
+  const browser = await puppeteer.launch({ headless: 'new' });
+  const page = await browser.newPage();
+
+  // Load the HTML file
+  await page.goto('file:///path/to/design.html', { waitUntil: 'networkidle0' });
+
+  // Set viewport to match document dimensions
+  await page.setViewport({ width: PAGE_WIDTH, height: PAGE_HEIGHT, deviceScaleFactor: 2 });
+  await page.emulateMediaType('screen');
+
+  // Generate PDF with exact dimensions
+  await page.pdf({
+    path: 'output.pdf',
+    width: `${PAGE_WIDTH}px`,
+    height: `${PAGE_HEIGHT}px`,
+    printBackground: true,
+    preferCSSPageSize: true,
+    scale: 1,
+    margin: { top: 0, right: 0, bottom: 0, left: 0 }
+  });
+
+  await browser.close();
+})();
 ```
 
-## Handling Different Input Types
+**Alternative: ReportLab (Python) for programmatic PDF:**
+```python
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import inch
 
-### Screenshots/Images:
-- Analyze pixel-by-pixel
-- Measure elements using grid overlay
-- Extract colors precisely
-- Note exact positioning
+c = canvas.Canvas("output.pdf", pagesize=(WIDTH, HEIGHT))
+# Place elements at exact coordinates
+c.drawString(x, y, "Text content")
+c.drawImage("image.png", x, y, width, height)
+c.save()
+```
 
-### PDFs:
-- Convert pages to images if needed
-- Extract text content accurately
-- Note page structure
-- Maintain multi-page layout if applicable
+### Output C: Editable PowerPoint (.pptx)
 
-### Figma Designs:
-- Note component structure
-- Extract exact values from properties panel
-- Match auto-layout behavior
-- Export assets at correct sizes
+Use PptxGenJS (Node.js) for creation from scratch:
 
-### Existing Websites:
-- Use browser dev tools to inspect
-- Copy exact CSS values
-- Note computed styles
-- Extract assets (images, icons)
+```javascript
+const pptxgen = require("pptxgenjs");
+const pptx = new pptxgen();
 
-## Example Prompts to Use This Skill
+// Set slide dimensions to match source (in inches)
+// Standard: 10" x 7.5", Widescreen: 13.33" x 7.5"
+pptx.defineLayout({ name: 'CUSTOM', width: WIDTH_INCHES, height: HEIGHT_INCHES });
+pptx.layout = 'CUSTOM';
 
-User: "Replicate this website design exactly"
-→ Use this skill to analyze and recreate pixel-perfect code
+const slide = pptx.addSlide();
 
-User: "Clone this landing page from the screenshot"
-→ Extract all design elements and recreate 1:1
+// Add text at exact position (all values in inches)
+slide.addText("Heading Text", {
+  x: X_INCHES,        // from left edge
+  y: Y_INCHES,        // from top edge
+  w: WIDTH_INCHES,    // text box width
+  h: HEIGHT_INCHES,   // text box height
+  fontSize: FONT_SIZE_PT,
+  fontFace: "Font Name",
+  color: "HEXCOLOR",  // without #
+  bold: true,
+  align: "left",      // left, center, right
+  valign: "top",      // top, middle, bottom
+  margin: 0,          // remove default padding
+});
 
-User: "Match this PDF report layout"
-→ Replicate document structure and styling exactly
+// Add image at exact position
+slide.addImage({
+  path: "image.png",  // or data: base64
+  x: X_INCHES,
+  y: Y_INCHES,
+  w: WIDTH_INCHES,
+  h: HEIGHT_INCHES,
+});
 
-User: "Recreate this dashboard from the image"
-→ Match layout, colors, typography precisely
+// Add shape
+slide.addShape(pptx.ShapeType.rect, {
+  x: X_INCHES, y: Y_INCHES, w: WIDTH_INCHES, h: HEIGHT_INCHES,
+  fill: { color: "HEXCOLOR" },
+  line: { color: "HEXCOLOR", width: 1 },
+});
 
-## Quality Standards
+pptx.writeFile({ fileName: "output.pptx" });
+```
 
-The replicated design should be:
-- ✅ Visually indistinguishable from the original
-- ✅ Pixel-perfect measurements
-- ✅ Exact color matches
-- ✅ Proper responsive behavior
-- ✅ Clean, production-ready code
-- ✅ Properly commented with measurements
-
-## Tools to Use
-
-When available, use:
-- Color picker tools for exact hex codes
-- Image editors for measuring distances
-- Browser dev tools for inspecting existing sites
-- PDF viewers for extracting text content
-
-## Important Notes
-
-1. **Always ask for clarification** if the design intent is unclear
-2. **Confirm the tech stack** preference (HTML, React, Vue, etc.)
-3. **Note any animations** or interactions to replicate
-4. **Document design decisions** in code comments
-5. **Test at multiple screen sizes** for responsive designs
-6. **Use placeholder images** only if user hasn't provided assets
-
-## Output Deliverables
-
-For each replication task, provide:
-1. Complete source code file(s)
-2. Design specification document (extracted values)
-3. Instructions for running/using the code
-4. List of any required assets (fonts, images)
-5. Notes on responsive behavior
+**Coordinate conversion:**
+- Pixels to inches: `pixels / 96` (at 96 DPI)
+- Points to inches: `points / 72`
+- Always set `margin: 0` on text boxes for accurate positioning
 
 ---
 
-Remember: The goal is 1:1 replication. Every pixel matters. Measure twice, code once.
+## Step 3: Visual QA (MANDATORY)
+
+**Never skip this step. Your first render is almost never perfect.**
+
+### QA Process
+
+1. **Render the output** to an image for comparison
+2. **Compare side-by-side** with the original source
+3. **Check every element** against this list:
+
+```
+VISUAL QA CHECKLIST:
+□ Overall layout matches source proportions
+□ Text content is correct (no typos, no missing text)
+□ Text positions match (±5px tolerance)
+□ Font sizes match visually
+□ Font weights match (bold, regular, light)
+□ Text colors match
+□ Text alignment matches (left/center/right)
+□ Line breaks occur at same positions
+□ Images are correct size and position
+□ Image aspect ratios preserved
+□ Background colors/gradients match
+□ Spacing between elements matches
+□ Margins from edges match
+□ Decorative elements present and positioned
+□ No overlapping elements that shouldn't overlap
+□ No cut-off text or images
+□ Overall "feel" matches the original
+```
+
+### For HTML output:
+```bash
+# Screenshot with Puppeteer
+node -e "
+const puppeteer = require('puppeteer');
+(async () => {
+  const b = await puppeteer.launch({headless:'new'});
+  const p = await b.newPage();
+  await p.setViewport({width:PAGE_WIDTH, height:PAGE_HEIGHT, deviceScaleFactor:2});
+  await p.goto('file:///path/to/output.html', {waitUntil:'networkidle0'});
+  await p.screenshot({path:'qa-screenshot.png', fullPage:true});
+  await b.close();
+})();
+"
+```
+
+### For PPTX output:
+```bash
+# Convert to images via LibreOffice
+python scripts/office/soffice.py --headless --convert-to pdf output.pptx
+pdftoppm -jpeg -r 150 output.pdf slide
+# Compare slide-01.jpg with source
+```
+
+### Iteration Loop
+
+```
+Generate → Screenshot → Compare with source → List differences → Fix → Re-screenshot → Compare again
+```
+
+**Repeat until visual match is ≥95%.** Common issues to fix:
+- Font size off by 1-2px
+- Spacing gaps slightly different
+- Colors slightly off (re-sample from source)
+- Text wrapping differently (adjust container width)
+- Missing subtle elements (thin lines, small icons, shadows)
+
+---
+
+## Step 4: Coordinate Extraction Helpers
+
+### Using OCR for Text Positions (Python)
+
+When precision is critical, extract text bounding boxes from the source:
+
+```python
+import pytesseract
+from pytesseract import Output
+import cv2
+import json
+
+img = cv2.imread('source_design.png')
+data = pytesseract.image_to_data(img, output_type=Output.DICT)
+
+elements = []
+for i in range(len(data['text'])):
+    if int(data['conf'][i]) > 50 and data['text'][i].strip():
+        elements.append({
+            'text': data['text'][i],
+            'x': data['left'][i],
+            'y': data['top'][i],
+            'w': data['width'][i],
+            'h': data['height'][i],
+            'conf': data['conf'][i]
+        })
+
+with open('layout_data.json', 'w') as f:
+    json.dump(elements, f, indent=2)
+```
+
+### Using Claude Vision for Layout Analysis
+
+Prompt for structured extraction:
+
+```
+Analyze this design image and extract the EXACT layout as JSON:
+
+{
+  "dimensions": { "width": px, "height": px },
+  "background": "#hex or gradient description",
+  "elements": [
+    {
+      "type": "text|image|shape|line",
+      "content": "text content or image description",
+      "x": pixels_from_left,
+      "y": pixels_from_top,
+      "width": pixels,
+      "height": pixels,
+      "font": { "family": "name", "size": pt, "weight": "normal|bold", "color": "#hex" },
+      "alignment": "left|center|right",
+      "zIndex": number
+    }
+  ]
+}
+
+Be precise about positions. Estimate coordinates based on the image dimensions.
+```
+
+---
+
+## Common Document Types
+
+### Flyer / Poster (Single Page)
+- Use HTML with absolute positioning
+- Set page dimensions to match (e.g., 8.5"×11" = 816×1056px at 96dpi)
+- Convert to PDF for print
+
+### Multi-page Document
+- Use HTML with `@page` CSS rules and page breaks
+- Or generate each page separately
+
+### Presentation / Slide Deck
+- Use PptxGenJS for editable PPTX
+- One slide per page/screen
+- All text in editable text boxes
+
+### Website Screenshot
+- Use HTML/CSS with responsive structure
+- CSS Grid or Flexbox for layout
+- Include hover states if visible
+
+### Business Card / Brochure
+- HTML with absolute positioning
+- Convert to high-DPI PDF (deviceScaleFactor: 3)
+
+---
+
+## Dependencies
+
+```bash
+# Node.js
+npm install puppeteer pptxgenjs
+
+# Python
+pip install pytesseract opencv-python reportlab Pillow pdfplumber
+
+# System
+# Tesseract OCR: sudo apt install tesseract-ocr (Linux)
+# LibreOffice: for PPTX→PDF conversion
+# Poppler: for PDF→image (pdftoppm)
+```
+
+---
+
+## Tips for Pixel-Perfect Results
+
+1. **Measure, don't guess.** Use OCR bounding boxes or vision analysis for coordinates.
+2. **Font matching is 80% of the battle.** Get the font right and everything looks closer.
+3. **Use exact px values.** Never use `em`, `rem`, or `%` for reproduction work.
+4. **Set explicit dimensions on everything.** No `auto` widths or heights.
+5. **Check line-height.** Default line-height varies by browser/font. Set it explicitly.
+6. **Letter-spacing matters.** Headlines often have custom tracking.
+7. **Don't forget subtle elements.** Thin dividers, small icons, drop shadows, rounded corners.
+8. **Compare at same zoom level.** Screenshots must match source dimensions exactly.
+9. **Iterate aggressively.** 3-5 QA rounds is normal for high-fidelity work.
+10. **Use deviceScaleFactor: 2** for screenshots to catch sub-pixel rendering issues.
